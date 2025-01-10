@@ -19,13 +19,7 @@
             .then(data => {
                 L.geoJSON(data, {
                     onEachFeature: function (feature, layer) {
-                        var popupContent = '';
-                        for (var key in feature.properties) {
-                            if (feature.properties.hasOwnProperty(key)) {
-                                popupContent += `<strong>${key}</strong>: ${feature.properties[key]}<br>`;
-                            }
-                        }
-                        layer.bindPopup(popupContent);
+                        layer.bindPopup(JSON.stringify(feature.properties));
                     }
                 }).addTo(map);
             });
