@@ -14,7 +14,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
         }).addTo(map);
-        fetch('https://sai.github.io/[filename].geojson')
+        fetch('https://gsaikiran11.github.io/pandipadu.geojson')
             .then(response => response.json())
             .then(data => {
                 L.geoJSON(data, {
