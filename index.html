@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GeoJSON Map</title>
+    <title>GeoJSON Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
@@ -14,10 +14,20 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
         }).addTo(map);
-        fetch('https://gsaikiran11.github.io/Pandipadu.geojson')
+        fetch('https://sai.github.io/[filename].geojson')
             .then(response => response.json())
             .then(data => {
-                L.geoJSON(data).addTo(map);
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        var popupContent = '';
+                        for (var key in feature.properties) {
+                            if (feature.properties.hasOwnProperty(key)) {
+                                popupContent += `<strong>${key}</strong>: ${feature.properties[key]}<br>`;
+                            }
+                        }
+                        layer.bindPopup(popupContent);
+                    }
+                }).addTo(map);
             });
     </script>
 </body>
