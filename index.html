@@ -27,10 +27,21 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
 }).addTo(map);
 
-    // Load the GeoJSON file from GitHub URL
-    var geojsonUrl = 'https://raw.githubusercontent.com/gsaikiran11/gsaikiran11.github.io/refs/heads/main/Pandipadu.geojson';
-    omnivore.geojson(geojsonUrl).addTo(map);
-  </script>
 
+    // Add Esri's satellite imagery (you can replace this with your own satellite provider if needed)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
+    }).addTo(map);
+
+    // GeoJSON file URL from GitHub
+    var geojsonUrl = 'https://gsaikiran11.github.io/pandipadu.geojson'; // Replace with your GeoJSON file URL
+
+    // Load and add the GeoJSON data to the map
+    fetch(geojsonUrl)
+      .then(response => response.json())
+      .then(geojsonData => {
+        L.geoJSON(geojsonData).addTo(map);  // Add GeoJSON to the map
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 </body>
 </html>
