@@ -1,47 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoJSON on Satellite Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-omnivore@0.5.1/leaflet-omnivore.min.js"></script>
-  <style>
-    #map {
-      height: 100vh;
-      width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoJSON over ESRI Satellite</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
+    <div id="map" style="width: 100%; height: 100vh;"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([20, 78], 5); // Center the map to India
 
-  <div id="map"></div>
+        // Add ESRI satellite imagery layer
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }).addTo(map);
 
-  <script>
-    // Create map and set initial view
-    var map = L.map('map').setView([37.7749, -122.4194], 12); // Change to your desired coordinates
-
-    // Add Satillite Map
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
-}).addTo(map);
-
-
-    // Add Esri's satellite imagery (you can replace this with your own satellite provider if needed)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
-    }).addTo(map);
-
-    // GeoJSON file URL from GitHub
-    var geojsonUrl = 'https://gsaikiran11.github.io/pandipadu.geojson'; // Replace with your GeoJSON file URL
-
-    // Load and add the GeoJSON data to the map
-    fetch(geojsonUrl)
-      .then(response => response.json())
-      .then(geojsonData => {
-        L.geoJSON(geojsonData).addTo(map);  // Add GeoJSON to the map
-      })
-      .catch(error => console.error('Error loading GeoJSON:', error));
+        // Load your GeoJSON file
+        fetch('https://gsaikiran11.github.io/Pandipadu.geojson')
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        var popupContent = '';
+                        for (var key in feature.properties) {
+                            if (feature.properties.hasOwnProperty(key)) {
+                                popupContent += `<strong>${key}</strong>: ${feature.properties[key]}<br>`;
+                            }
+                        }
+                        layer.bindPopup(popupContent);
+                    }
+                }).addTo(map);
+            });
+    </script>
 </body>
 </html>
