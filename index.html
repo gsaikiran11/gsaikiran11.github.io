@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoJSON Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoJSON on Satellite Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-omnivore@0.5.1/leaflet-omnivore.min.js"></script>
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <div id="map" style="width: 100%; height: 100vh;"></div>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([0, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
-        fetch('https://gsaikiran11.github.io/pandipadu.geojson')
-            .then(response => response.json())
-            .then(data => {
-                L.geoJSON(data, {
-                    onEachFeature: function (feature, layer) {
-                        var popupContent = '<table>';
-                        for (var key in feature.properties) {
-                            if (feature.properties.hasOwnProperty(key)) {
-                                popupContent += `<tr><td><strong>${key}</strong></td><td>${feature.properties[key]}</td></tr>`;
-                            }
-                        }
-                        popupContent += '</table>';
-                        layer.bindPopup(popupContent);
-                    }
-                }).addTo(map);
-            });
-    </script>
+
+  <div id="map"></div>
+
+  <script>
+    // Create map and set initial view
+    var map = L.map('map').setView([37.7749, -122.4194], 12); // Change to your desired coordinates
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    // Add satellite imagery (you can switch to other free satellite layers)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    // Load the GeoJSON file from GitHub URL
+    var geojsonUrl = 'https://raw.githubusercontent.com/your-username/your-repo/branch/your-file.geojson';
+    omnivore.geojson(geojsonUrl).addTo(map);
+  </script>
+
 </body>
 </html>
