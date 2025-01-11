@@ -22,11 +22,10 @@
     // Create map and set initial view
     var map = L.map('map').setView([37.7749, -122.4194], 12); // Change to your desired coordinates
 
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-    // Add satellite imagery (you can switch to other free satellite layers)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    // Add Satillite Map
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
+}).addTo(map);
 
     // Load the GeoJSON file from GitHub URL
     var geojsonUrl = 'https://raw.githubusercontent.com/your-username/your-repo/branch/your-file.geojson';
